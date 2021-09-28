@@ -35,6 +35,7 @@ from DISClib.Algorithms.Sorting import insertionsort as ist
 from DISClib.Algorithms.Sorting import mergesort as mst
 from DISClib.Algorithms.Sorting import quicksort as qst
 from DISClib.Algorithms.Sorting import shellsort as sst
+from DISClib.ADT import map as mp
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
@@ -51,16 +52,17 @@ def crearCatalogo(tipo_lista):
     
     """
     catalogo = {'artistas': None,
-                'obras': None,}
+                'obras': None,
+                'medios': None,}
 
     catalogo['artistas'] = lt.newList(tipo_lista)
     catalogo['obras'] = lt.newList(tipo_lista)
+    catalogo['medios'] = mp.newMap(10000, maptype='CHAINING', loadfactor=0.5)
 
     return catalogo
 
 
 # Funciones para agregar informacion al catalogo
-
 def agregarArtista(catalogo, artista):
     artista = nuevoArtista(artista['ConstituentID'],artista['DisplayName'],artista['BeginDate'],artista['EndDate'],artista['Nationality'], artista['Gender'])
     lt.addLast(catalogo['artistas'], artista)
@@ -68,6 +70,9 @@ def agregarArtista(catalogo, artista):
 def agregarObra(catalogo, obra):
     obra=nuevaObra(obra['ConstituentID'], obra['ObjectID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'], obra['Dimensions'], obra['Diameter (cm)'], obra['Length (cm)'], obra['Classification'])
     lt.addLast(catalogo['obras'], obra)
+
+def agregarMedio(catalogo, obra):
+    mp.put(catalogo['medios'],obra['Medium'],obra)
 
 # Funciones para creacion de datos
 
@@ -564,4 +569,3 @@ def calcularCostoTransporteObra(obra):
     else:
         obra['costo_transporte']=costo_mayor
         return costo_mayor
-        
