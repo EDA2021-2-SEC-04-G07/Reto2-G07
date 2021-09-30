@@ -36,6 +36,7 @@ from DISClib.Algorithms.Sorting import mergesort as mst
 from DISClib.Algorithms.Sorting import quicksort as qst
 from DISClib.Algorithms.Sorting import shellsort as sst
 from DISClib.ADT import map as mp
+from DISClib.DataStructures import mapentry as me
 from DISClib.ADT import list as lt
 from DISClib.Algorithms.Sorting import shellsort as sa
 assert cf
@@ -57,7 +58,7 @@ def crearCatalogo(tipo_lista):
 
     catalogo['artistas'] = lt.newList(tipo_lista)
     catalogo['obras'] = lt.newList(tipo_lista)
-    catalogo['medios'] = mp.newMap(10000, maptype='CHAINING', loadfactor=0.5)
+    catalogo['medios'] = mp.newMap(10000, maptype='PROBING', loadfactor=0.5)
 
     return catalogo
 
@@ -72,7 +73,18 @@ def agregarObra(catalogo, obra):
     lt.addLast(catalogo['obras'], obra)
 
 def agregarMedio(catalogo, obra):
-    mp.put(catalogo['medios'],obra['Medium'],obra)
+    obra['fecha_adquisicion'] = obra['DateAcquired']
+    del obra['DateAcquired']
+    existeMedio = mp.contains(catalogo['medios'], obra['Medium'])
+    if existeMedio:
+        entri = mp.get(catalogo['medios'], obra['Medium'])
+        entry = me.getValue(entri)
+    else:
+        entry = {'medio': "", "obras": None}
+        entry['medio'] = obra['Medium']
+        entry['obras'] = lt.newList('ARRAY_LIST')
+        mp.put(catalogo['medios'], obra['Medium'], entry)
+    lt.addLast(entry['obras'], obra)
 
 # Funciones para creacion de datos
 
