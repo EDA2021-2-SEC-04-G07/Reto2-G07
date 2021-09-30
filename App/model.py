@@ -41,6 +41,16 @@ los mismos.
 
 # Funciones para agregar informacion al catalogo
 
+def crearCatalogo(tipo_lista):
+    
+    catalogo = {'artistas': None,
+                'obras': None,}
+
+    catalogo['artistas'] = lt.newList(tipo_lista)
+    catalogo['obras'] = lt.newList(tipo_lista)
+
+    return catalogo
+
 # Funciones para creacion de datos
 
 # Funciones de consulta
