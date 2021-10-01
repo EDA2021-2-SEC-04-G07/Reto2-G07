@@ -21,3 +21,8 @@ Este directorio contiene las pruebas realizadas a los TADs, Estructuras de Datos
 Req3: Rafael Santiago Bastos Russi / 202110792 / r.bastos
 
 Req4: Santiago Andres Ramirez Ramirez / 201910908 / sa.ramirezr
+
+--Integrantes--
+Rafael Santiago Bastos Russi / 202110792 / r.bastos
+
+Santiago Andres Ramirez Ramirez / 201910908 / sa.ramirezr
