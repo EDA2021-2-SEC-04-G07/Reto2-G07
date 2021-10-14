@@ -93,10 +93,9 @@ def agregarNacionalidad(catalogo, obra):
     lista_id_artistas = lt.newList('ARRAY_LIST')
     x = obra['ConstituentID']
     characters = "[] "
-
     for s in range(len(characters)):
-        x = x.replace(characters[s],"")
-
+        x = x.replace(characters[s],"")       
+    
     lista = x.split(',')
     for a in lista:
             lt.addLast(lista_id_artistas, a)
