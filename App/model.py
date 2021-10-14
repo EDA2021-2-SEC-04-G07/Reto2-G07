@@ -93,8 +93,8 @@ def agregarMedio(catalogo, obra):
 
 def cargarNacionalidadesObras(catalogo):
 
-    for i in lt.iterator(catalogo):      
-        mp.put(catalogo['obras']['nacionalidades'], i['nacionalidad'], i)
+    for i in lt.iterator(catalogo['obras']):      
+        mp.put(catalogo['nacionalidades'], i['nacionalidad'], i)
         
     
 
