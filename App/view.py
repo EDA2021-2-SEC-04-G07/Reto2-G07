@@ -68,12 +68,15 @@ while True:
     inputs = input('Seleccione una opción para continuar\n')
     
     if int(inputs[0]) == 1:
-            
+        tiempo_inicial = time.process_time()    
         print("Cargando información de los archivos ....")
         catalogo = controller.initCatalogo(tipo_lista = 'ARRAY_LIST')
         cargarDatos(catalogo)
-
+        tiempo_final = time.process_time()
+        duracion = (tiempo_final - tiempo_inicial)*1000
         system("cls")
+        print(f"El tiempo de carga de datos es: {duracion} milisegundos")
+        input()
         
 
     elif int(inputs[0]) == 2:
@@ -100,15 +103,16 @@ while True:
             break
 
         input()
+        system("cls")
         
     elif int(inputs[0]) == 3:
         nacionalidad = input("Escriba la nacionalidad: ")
-        
         lista_nacionalidades = catalogo['nacionalidades']
-        lista_filtrada = mp.get(lista_nacionalidades, nacionalidad)
+        entri = mp.get(lista_nacionalidades, nacionalidad)
+        lista_filtrada = me.getValue(entri)
         print('Existen {} obras en la nacionalidad mencionada'.format(lt.size(lista_filtrada)))
-        
-        
+        input()
+        system("cls")
 
     else:
         system("cls")

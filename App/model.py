@@ -59,8 +59,8 @@ def crearCatalogo(tipo_lista):
 
     catalogo['artistas'] = lt.newList(tipo_lista)
     catalogo['obras'] = lt.newList(tipo_lista)
-    catalogo['medios'] = mp.newMap(10000, maptype='PROBING', loadfactor=0.5)
-    catalogo['nacionalidades'] = mp.newMap(10000, maptype='CHAINING', loadfactor=4.0)
+    catalogo['medios'] = mp.newMap(10000, maptype='CHAINING', loadfactor=8.0)
+    catalogo['nacionalidades'] = mp.newMap(10000, maptype='CHAINING', loadfactor=8.0)
 
     return catalogo
 
