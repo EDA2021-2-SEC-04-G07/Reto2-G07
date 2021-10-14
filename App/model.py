@@ -70,7 +70,6 @@ def agregarArtista(catalogo, artista):
     artista = nuevoArtista(artista['ConstituentID'],artista['DisplayName'],artista['BeginDate'],artista['EndDate'],artista['Nationality'], artista['Gender'])
     lt.addLast(catalogo['artistas'], artista)
     
-    mp.put(catalogo['nacionalidades'], artista['id'], artista['nacionalidad'])
 
 def agregarObra(catalogo, obra):
     obra=nuevaObra(obra['ConstituentID'], obra['ObjectID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'], obra['Dimensions'], obra['Diameter (cm)'], obra['Length (cm)'], obra['Classification'])
@@ -90,29 +89,30 @@ def agregarMedio(catalogo, obra):
         mp.put(catalogo['medios'], obra['Medium'], entry)
     lt.addLast(entry['obras'], obra)
     
+def agregarNacionalidad(catalogo, obra):
+    lista_id_artistas = lt.newList('ARRAY_LIST')
+    x = obra['ConstituentID']
+    characters = "[] "
 
-def cargarNacionalidadesObras(catalogo):
+    for s in range(len(characters)):
+        x = x.replace(characters[s],"")
 
-    for i in lt.iterator(catalogo):      
-        mp.put(catalogo['obras']['nacionalidades'], i['nacionalidad'], i)
+    lista = x.split(',')
+    for a in lista:
+            lt.addLast(lista_id_artistas, a)
+    
+    for i in lt.iterator(lista_id_artistas):
+        nacionalidad = consultarNacionalidad(catalogo, int(i))
+        existeNacionalidad = mp.contains(catalogo['nacionalidades'], nacionalidad)
+        if existeNacionalidad:
+            entri = mp.get(catalogo['nacionalidades'], nacionalidad)
+            entry = me.getValue(entri)
+        else:
+            entry = lt.newList('ARRAY_LIST')
+            mp.put(catalogo['nacionalidades'], nacionalidad, entry)
+        lt.addLast(entry, obra)
+    
         
-    
-
-def agregarNacionalidad(catalogo, artista, obra):
-    artista['nacionalidad']
-    pass
-    
-    
-def crearCatalogo(tipo_lista):
-    
-    catalogo = {'artistas': None,
-                'obras': None,}
-
-    catalogo['artistas'] = lt.newList(tipo_lista)
-    catalogo['obras'] = lt.newList(tipo_lista)
-
-    return catalogo
-
 # Funciones para creacion de datos
 
 def nuevoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad, genero):

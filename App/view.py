@@ -71,17 +71,7 @@ while True:
             
         print("Cargando información de los archivos ....")
         catalogo = controller.initCatalogo(tipo_lista = 'ARRAY_LIST')
-        #print(catalogo)
         cargarDatos(catalogo)
-        #print(catalogo)
-        
-        for i in lt.iterator(catalogo['obras']):
-            for j in lt.iterator(catalogo['artistas']):     
-                if i['id'] == j['id']:
-                    i['nacionalidad'] = j['nacionalidad']
-                    break
-                
-        controller.cargarNacionalidadesObras(catalogo)
 
         system("cls")
         
