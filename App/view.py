@@ -44,6 +44,7 @@ def printMenu():
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
     print("2- Dar las n obras mas antiguas de un medio especifico")
+    print("3- Contar el número de obras de una nacionalidad")
 
 catalogo = None
 
@@ -70,7 +71,17 @@ while True:
             
         print("Cargando información de los archivos ....")
         catalogo = controller.initCatalogo(tipo_lista = 'ARRAY_LIST')
+        #print(catalogo)
         cargarDatos(catalogo)
+        #print(catalogo)
+        
+        for i in lt.iterator(catalogo['obras']):
+            for j in lt.iterator(catalogo['artistas']):     
+                if i['id'] == j['id']:
+                    i['nacionalidad'] = j['nacionalidad']
+                    break
+                
+        controller.cargarNacionalidadesObras(catalogo)
 
         system("cls")
         
@@ -99,6 +110,15 @@ while True:
             break
 
         input()
+        
+    elif int(inputs[0]) == 3:
+        nacionalidad = input("Escriba la nacionalidad: ")
+        
+        lista_nacionalidades = catalogo['nacionalidades']
+        lista_filtrada = mp.get(lista_nacionalidades, nacionalidad)
+        print('Existen {} obras en la nacionalidad mencionada'.format(lt.size(lista_filtrada)))
+        
+        
 
     else:
         system("cls")

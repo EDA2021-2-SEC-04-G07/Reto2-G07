@@ -54,11 +54,13 @@ def crearCatalogo(tipo_lista):
     """
     catalogo = {'artistas': None,
                 'obras': None,
-                'medios': None,}
+                'medios': None,
+                'nacionalidades': None}
 
     catalogo['artistas'] = lt.newList(tipo_lista)
     catalogo['obras'] = lt.newList(tipo_lista)
     catalogo['medios'] = mp.newMap(10000, maptype='PROBING', loadfactor=0.5)
+    catalogo['nacionalidades'] = mp.newMap(10000, maptype='CHAINING', loadfactor=4.0)
 
     return catalogo
 
@@ -67,6 +69,8 @@ def crearCatalogo(tipo_lista):
 def agregarArtista(catalogo, artista):
     artista = nuevoArtista(artista['ConstituentID'],artista['DisplayName'],artista['BeginDate'],artista['EndDate'],artista['Nationality'], artista['Gender'])
     lt.addLast(catalogo['artistas'], artista)
+    
+    mp.put(catalogo['nacionalidades'], artista['id'], artista['nacionalidad'])
 
 def agregarObra(catalogo, obra):
     obra=nuevaObra(obra['ConstituentID'], obra['ObjectID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'], obra['Dimensions'], obra['Diameter (cm)'], obra['Length (cm)'], obra['Classification'])
@@ -85,7 +89,20 @@ def agregarMedio(catalogo, obra):
         entry['obras'] = lt.newList('ARRAY_LIST')
         mp.put(catalogo['medios'], obra['Medium'], entry)
     lt.addLast(entry['obras'], obra)
+    
 
+def cargarNacionalidadesObras(catalogo):
+
+    for i in lt.iterator(catalogo):      
+        mp.put(catalogo['obras']['nacionalidades'], i['nacionalidad'], i)
+        
+    
+
+def agregarNacionalidad(catalogo, artista, obra):
+    artista['nacionalidad']
+    pass
+    
+    
 def crearCatalogo(tipo_lista):
     
     catalogo = {'artistas': None,

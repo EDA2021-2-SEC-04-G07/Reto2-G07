@@ -59,6 +59,9 @@ def cargarObras(catalogo):
     for obra in input_file:
         model.agregarObra(catalogo, obra)
         model.agregarMedio(catalogo, obra)
+        
+def cargarNacionalidadesObras(info):
+    model.cargarNacionalidadesObras(info)
 
 # Funciones de ordenamiento
 
