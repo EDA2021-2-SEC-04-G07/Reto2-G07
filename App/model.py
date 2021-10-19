@@ -197,9 +197,24 @@ def nuevoDatoObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adqu
     
 def crearArtista1(catalogo, artista):
     
+    temp = artista['BeginDate']
+    lista_nacimiento_final = []
+    
+    if not temp.isnumeric():
+        lista_nacimiento_parcial = temp.split(' ')
+        
+        for i in lista_nacimiento_parcial:
+            if i.isnumeric():
+                lista_nacimiento_final.append(i)
+                
+    if len(lista_nacimiento_final) == 0:
+        nacimiento_final = temp
+    else:
+        nacimiento_final = lista_nacimiento_final[0] 
+    
     nuevoArtista = {'id': artista['ConstituentID'],
                     'nombre': artista['DisplayName'],
-                    'fecha_nacimiento': artista['BeginDate'],
+                    'fecha_nacimiento': nacimiento_final,
                     'fecha_muerte': artista['EndDate'],
                     'nacionalidad': artista['Nationality'],
                     'genero': artista['Gender'],
@@ -235,12 +250,14 @@ def agregarObra1(catalogo, obra):
         
         
 def crearObra1(catalogo, obra):
-    
+        
     nuevaObra = {'id': obra['ConstituentID'],
                  'titulo': obra['Title'],
+                 'fecha': obra['Date'],
                  'medio': obra['Medium'],
                  'departamento': obra['Department'], 
                  'fecha_adquisicion': obra['DateAcquired'],
+                 'dimensiones': obra['Dimensions'],
                  'altura': obra['Height (cm)'], 
                  'largo': obra['Length (cm)'],
                  'ancho': obra['Width (cm)'], 
@@ -344,6 +361,7 @@ def rangoArtistasPorAnho(catalogo, anho_inicial, anho_final):
     lista_info = lt.newList(datastructure='ARRAY_LIST')
     
     for anho in range(anho_inicial, anho_final+1):
+        
         llave_anho = str(anho)
         entry = mp.get(catalogo['nacimientos'], llave_anho)
         valores_anho = me.getValue(entry)

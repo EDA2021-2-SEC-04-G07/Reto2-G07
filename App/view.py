@@ -41,10 +41,18 @@ operación solicitada
 
 def printMenu():
     system("cls")
+    #print("1- Cargar información en el catálogo")
+    #print("2- Dar las n obras mas antiguas de un medio especifico")
+    #print("3- Contar el número de obras de una nacionalidad")
+    
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- Dar las n obras mas antiguas de un medio especifico")
-    print("3- Contar el número de obras de una nacionalidad")
+    print("2- Lista cronólógica de los artistas")
+    print("3- Lista cronológica de las adquisiciones")
+    print("4- Clasificar las obras de un artista por técnica")
+    print("5- Clasificar las obras por la nacionalidad de sus creadores")
+    print("6- Transportar obras de un departamento ")
+    print("7- Crear nueva exposición")
 
 catalogo = None
 
@@ -86,14 +94,19 @@ while True:
         #cargarDatos(catalogo)
         tiempo_final = time.process_time()
         duracion = (tiempo_final - tiempo_inicial)*1000
-        system("cls")
+        
         print(f"El tiempo de carga de datos es: {duracion} milisegundos")
         input()
+        system("cls")
         
+        
+
     elif int(inputs[0]) == 2:
         
         anho_inicial = int(input("Digite el año inicial: "))
         anho_final = int(input("Digite el año final: "))
+        
+        tiempo_inicial = time.process_time()
         
         rango_artistas = controller.rangoArtistasPorAnho(catalogo, anho_inicial, anho_final)
         info_artistas = lt.newList(datastructure='ARRAY_LIST')
@@ -101,7 +114,7 @@ while True:
         for i in lt.iterator(rango_artistas):
             for j in lt.iterator(i):
                 lt.addLast(info_artistas, j)
-        
+                
         primeros_3 = lt.subList(info_artistas, 1, 3)  
         ultimos_3 = lt.subList(info_artistas, (lt.size(info_artistas)-2), 3)  
         resultado_1 = 'Hay {} artistas nacidos entre {} y {}'.format(lt.size(info_artistas), str(anho_inicial), str(anho_final))
@@ -121,10 +134,91 @@ while True:
         for i in lt.iterator(ultimos_3):
             print('{} \t\t\t {}  \t\t    {}   \t  {}\t\t  {}'.format(i['nombre'], i['fecha_nacimiento'], i['fecha_muerte'], i['nacionalidad'], i['genero']))
         print('==================================================================================================')    
-        #print('El tiempo de ejecución fue de: ', rango_ordenado[0], ' ms.')
+        
+        tiempo_final = time.process_time()
+        duracion = (tiempo_final - tiempo_inicial)*1000
+        
+        print('El tiempo de ejecución fue de: ', duracion, ' ms.')
 
         input()
         system("cls")
+        
+        
+        
+    elif int(inputs[0]) == 3:
+        pass
+    
+    
+    
+    elif int(inputs[0]) == 4:
+        
+        nombre_artista = input("Digite el nombre del artista: ")
+        
+        tiempo_inicial = time.process_time()
+        
+        entry_artista = mp.get(catalogo['artistas'], nombre_artista)
+        info_artista = me.getValue(entry_artista)
+        obras_artista = info_artista['obras']
+        info_obras = lt.newList(datastructure='ARRAY_LIST')
+        idArtista = info_artista['id']
+        lista_medios = lt.newList(datastructure='ARRAY_LIST')
+        lista_todos_medios = lt.newList(datastructure='ARRAY_LIST')
+        lista_todos_medios = []
+        
+        for i in lt.iterator(obras_artista):
+            entry_medio = mp.get(catalogo['obras'], i)
+            info_medio = me.getValue(entry_medio)
+            medio = info_medio['medio']
+            
+            if lt.isPresent(lista_medios, medio) == 0:
+                lt.addLast(lista_medios, medio)
+                
+            lista_todos_medios.append(medio)
+            lt.addLast(info_obras, info_medio)
+            
+        obras_artista_ordenada = controller.llamarQuicksort(info_obras, identificador=2)
+        mayor = 0
+        medio_mayor = None
+            
+        for i in lista_todos_medios:
+            cont = lista_todos_medios.count(i)
+            
+            if cont > mayor:
+                mayor = cont
+                medio_mayor = i
+            
+        print("Clasificando ...")       
+        print(('{} con MOMA Id {} tiene {} obras a su nombre en el museo.').format(nombre_artista, idArtista, lt.size(obras_artista)))
+        print(('Existen {} medios/técnicas diferentes en su trabajo.').format(lt.size(lista_medios)))
+        print('Su técnica más utilizada es {} con {} obras.'.format(medio_mayor, mayor))    
+        print('')   
+        print('\tTítulo \t |Fecha de la obra|    Técnica    |    \t\t Dimensiones    ')  
+        print('==================================================================================================')      
+        for i in lt.iterator(obras_artista_ordenada[1]):
+            entry_cada_obra = mp.get(catalogo['obras'], i['titulo'])
+            info_cada_obra = me.getValue(entry_cada_obra)
+            
+            if info_cada_obra['medio'] == medio_mayor:
+                print('{}\t   {} \t\t {} \t\t {}'.format(info_cada_obra['titulo'], info_cada_obra['fecha'], info_cada_obra['medio'], info_cada_obra['dimensiones']))
+        print('')
+        
+        tiempo_final = time.process_time()
+        duracion = (tiempo_final - tiempo_inicial)*1000
+        
+        print('El tiempo de ejecución fue de: ', duracion, ' ms.')
+        
+        input()
+        system("cls")
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
         
 
