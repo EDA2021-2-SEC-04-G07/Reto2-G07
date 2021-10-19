@@ -52,13 +52,13 @@ def initCatalogo():
     """
     Inicializa el catalogo del modelo
     """
-    return controller.initCatalogo()
+    return controller.initCatalogo1()
 
-def cargarDatos(catalogo):
+def cargarDatos1(catalogo):
     """
     Carga las obras y los artistas en la estructura de datos
     """
-    controller.cargarDatos(catalogo)
+    controller.cargarDatos1(catalogo)
 
 """
 Menu principal
@@ -70,23 +70,59 @@ while True:
     if int(inputs[0]) == 1:
             
         print("Cargando información de los archivos ....")
-        catalogo = controller.initCatalogo(tipo_lista = 'ARRAY_LIST')
-        #print(catalogo)
-        cargarDatos(catalogo)
-        #print(catalogo)
+
+        catalogo = controller.initCatalogo1()
+        cargarDatos1(catalogo)
         
-        for i in lt.iterator(catalogo['obras']):
-            for j in lt.iterator(catalogo['artistas']):     
-                if i['id'] == j['id']:
-                    i['nacionalidad'] = j['nacionalidad']
-                    break
+        #for i in lt.iterator(catalogo['obras']):
+         #   for j in lt.iterator(catalogo['artistas']):     
+          #      if i['id'] == j['id']:
+           #         i['nacionalidad'] = j['nacionalidad']
+            #        break
                 
-        controller.cargarNacionalidadesObras(catalogo)
+        #controller.cargarNacionalidadesObras(catalogo)
 
         system("cls")
         
-
     elif int(inputs[0]) == 2:
+        
+        anho_inicial = int(input("Digite el año inicial: "))
+        anho_final = int(input("Digite el año final: "))
+        
+        rango_artistas = controller.rangoArtistasPorAnho(catalogo, anho_inicial, anho_final)
+        info_artistas = lt.newList(datastructure='ARRAY_LIST')
+        
+        for i in lt.iterator(rango_artistas):
+            for j in lt.iterator(i):
+                lt.addLast(info_artistas, j)
+        
+        primeros_3 = lt.subList(info_artistas, 1, 3)  
+        ultimos_3 = lt.subList(info_artistas, (lt.size(info_artistas)-2), 3)  
+        resultado_1 = 'Hay {} artistas nacidos entre {} y {}'.format(lt.size(info_artistas), str(anho_inicial), str(anho_final))
+        
+        print(resultado_1)
+        print('========================================================')
+        
+        print('Los primeros 3 artistas en el rango son: ')
+        print('        Nombre         | Fecha de Nacimiento | Fecha de muerte |   Nacionalidad   |    Género   ')
+        print('==================================================================================================')
+        for i in lt.iterator(primeros_3):
+            print('{} \t\t\t {}  \t\t    {}   \t  {}\t\t  {}'.format(i['nombre'], i['fecha_nacimiento'], i['fecha_muerte'], i['nacionalidad'], i['genero']))
+        print(' ')  
+        print('Los últimos 3 artistas en el rango son: ')
+        print('        Nombre         | Fecha de Nacimiento | Fecha de muerte |   Nacionalidad   |    Género   ')
+        print('==================================================================================================')
+        for i in lt.iterator(ultimos_3):
+            print('{} \t\t\t {}  \t\t    {}   \t  {}\t\t  {}'.format(i['nombre'], i['fecha_nacimiento'], i['fecha_muerte'], i['nacionalidad'], i['genero']))
+        print('==================================================================================================')    
+        #print('El tiempo de ejecución fue de: ', rango_ordenado[0], ' ms.')
+
+        input()
+        system("cls")
+        
+        
+
+    elif int(inputs[0]) == 8:
         
         medio = input('Digite el medio a analizar: ')
         n = int(input('Digite el número de obras que quiere analizar: '))        

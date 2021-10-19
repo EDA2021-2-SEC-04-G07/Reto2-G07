@@ -47,86 +47,108 @@ los mismos.
 """
 
 # Construccion de modelos
-
-def crearCatalogo(tipo_lista):
-    """
     
-    """
-    catalogo = {'artistas': None,
+def crearCatalogo1():
+    
+    catalogo = {#'datos_artistas': None,
+                #'datos_obras': None,
+                'id_obras': None,
+                'artistas': None,
                 'obras': None,
+                'nacimientos': None,
+                'fechas_obras': None,
                 'medios': None,
-                'nacionalidades': None}
-
-    catalogo['artistas'] = lt.newList(tipo_lista)
-    catalogo['obras'] = lt.newList(tipo_lista)
-    catalogo['medios'] = mp.newMap(10000, maptype='PROBING', loadfactor=0.5)
-    catalogo['nacionalidades'] = mp.newMap(10000, maptype='CHAINING', loadfactor=4.0)
-
+                'nacionalidades': None,
+                'departamentos': None,
+                }
+    
+    #catalogo['datos_artistas'] = lt.newList(datastructure='ARRAY_LIST')
+    #catalogo['datos_obras'] = lt.newList(datastructure='ARRAY_LIST')
+    catalogo['id_obras'] = mp.newMap()
+    catalogo['artistas'] = mp.newMap()
+    catalogo['obras'] = mp.newMap()
+    catalogo['nacimientos'] = mp.newMap()
+    catalogo['medios'] = mp.newMap()
+    catalogo['fechas_obras'] = mp.newMap()
+    catalogo['nacionalidades'] = mp.newMap()
+    catalogo['departamentos'] = mp.newMap()
+    
     return catalogo
+
+
 
 
 # Funciones para agregar informacion al catalogo
-def agregarArtista(catalogo, artista):
-    artista = nuevoArtista(artista['ConstituentID'],artista['DisplayName'],artista['BeginDate'],artista['EndDate'],artista['Nationality'], artista['Gender'])
-    lt.addLast(catalogo['artistas'], artista)
+
+def agregarIdObra(catalogo, obra):
     
-    mp.put(catalogo['nacionalidades'], artista['id'], artista['nacionalidad'])
-
-def agregarObra(catalogo, obra):
-    obra=nuevaObra(obra['ConstituentID'], obra['ObjectID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'], obra['Dimensions'], obra['Diameter (cm)'], obra['Length (cm)'], obra['Classification'])
-    lt.addLast(catalogo['obras'], obra)
-
-def agregarMedio(catalogo, obra):
-    obra['fecha_adquisicion'] = obra['DateAcquired']
-    del obra['DateAcquired']
-    existeMedio = mp.contains(catalogo['medios'], obra['Medium'])
-    if existeMedio:
-        entri = mp.get(catalogo['medios'], obra['Medium'])
-        entry = me.getValue(entri)
-    else:
-        entry = {'medio': "", "obras": None}
-        entry['medio'] = obra['Medium']
-        entry['obras'] = lt.newList('ARRAY_LIST')
-        mp.put(catalogo['medios'], obra['Medium'], entry)
-    lt.addLast(entry['obras'], obra)
+    obra['ConstituentID'] = obra['ConstituentID'][1:-1]
+    obra['ConstituentID'] = obra['ConstituentID'].replace(" ", "")
     
-
-def cargarNacionalidadesObras(catalogo):
-
-    for i in lt.iterator(catalogo['obras']):      
-        mp.put(catalogo['nacionalidades'], i['nacionalidad'], i)
+    if ',' in obra['ConstituentID']:
+        lista_id = obra['ConstituentID'].split(',')
         
+        for id in lista_id:
+            existe = mp.contains(catalogo['id_obras'], id)
+            
+            if existe:
+                entry = mp.get(catalogo['id_obras'], id)
+                lista_obras = me.getValue(entry)
+                lt.addLast(lista_obras, obra['Title'])
+            else:
+                lista_obras = lt.newList(datastructure='ARRAY_LIST')
+                lt.addLast(lista_obras, obra['Title'])
+                mp.put(catalogo['id_obras'], id, lista_obras)
+                
+    else:
+        existe = mp.contains(catalogo['id_obras'], obra['ConstituentID'])
+        
+        if existe:
+            entry = mp.get(catalogo['id_obras'], obra['ConstituentID'])
+            lista_obras = me.getValue(entry)
+            lt.addLast(lista_obras, obra['Title'])
+        else:
+            lista_obras = lt.newList(datastructure='ARRAY_LIST')
+            lt.addLast(lista_obras, obra['Title'])
+            mp.put(catalogo['id_obras'], obra['ConstituentID'], lista_obras)
+        
+
+def agregarArtista1(catalogo, artista):
     
+    existe = mp.contains(catalogo['artistas'], artista['DisplayName'])
+    
+    if existe:
+        return
+    else:
+        nuevoArtista = crearArtista1(catalogo, artista)
+        mp.put(catalogo['artistas'], artista['DisplayName'], nuevoArtista)
+        
 
-def agregarNacionalidad(catalogo, artista, obra):
-    artista['nacionalidad']
-    pass
+def agregarDatoArtista(catalogo, artista):
+    artista = nuevoDatoArtista(artista['ConstituentID'],artista['DisplayName'],artista['BeginDate'],artista['EndDate'],artista['Nationality'], artista['Gender'])
+    lt.addLast(catalogo['datos_artistas'], artista)
     
     
-def crearCatalogo(tipo_lista):
+def nuevoDatoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad, genero):
     
-    catalogo = {'artistas': None,
-                'obras': None,}
-
-    catalogo['artistas'] = lt.newList(tipo_lista)
-    catalogo['obras'] = lt.newList(tipo_lista)
-
-    return catalogo
-
-# Funciones para creacion de datos
-
-def nuevoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad, genero):
     artista={'id':"", 'nombre':"", 'fecha_nacimiento':"", 'fecha_muerte':"", 'nacionalidad':"", 'genero':""}
     artista['id'] = id
-    artista['nombre']=nombre
+    artista['nombre'] = nombre
     artista['fecha_nacimiento'] = fecha_nacimiento
     artista['fecha_muerte'] = fecha_muerte
-    artista['nacionalidad']=nacionalidad
+    artista['nacionalidad'] = nacionalidad
     artista['genero'] = genero
-    #artista['obras']=lt.newList('ARRAY_LIST')
-    return artista
 
-def nuevaObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso, linea, dimensiones, diametro, largo, clasificacion):
+    return artista
+    
+
+def agregarDatoObra(catalogo, obra):
+    
+    obra=nuevoDatoObra(obra['ConstituentID'], obra['ObjectID'], obra['Title'], obra['Date'], obra['Medium'], obra['Department'], obra['DateAcquired'], obra['Height (cm)'], obra['Width (cm)'], obra['Weight (kg)'], obra['CreditLine'], obra['Dimensions'], obra['Diameter (cm)'], obra['Length (cm)'], obra['Classification'])
+    lt.addLast(catalogo['datos_obras'], obra)
+    
+    
+def nuevoDatoObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso, linea, dimensiones, diametro, largo, clasificacion):
     
     obra={'id':"", 'objectId':"", 'titulo':"", 'fecha':"", 'tecnica':"", 'departamento':"", 'fecha_adquisicion':"", 'altura':"", 'ancho':"", 'peso':"", 'linea_adquisicion':"", 'dimensiones':"", 'diametro':"", 'largo':""}
     obra['id']=id
@@ -146,6 +168,166 @@ def nuevaObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisic
     obra['clasificacion'] = clasificacion
     
     return obra
+    
+    
+def crearArtista1(catalogo, artista):
+    
+    nuevoArtista = {'id': artista['ConstituentID'],
+                    'nombre': artista['DisplayName'],
+                    'fecha_nacimiento': artista['BeginDate'],
+                    'fecha_muerte': artista['EndDate'],
+                    'nacionalidad': artista['Nationality'],
+                    'genero': artista['Gender'],
+                    'obras': None
+                    }
+    
+    nuevoArtista['obras'] = asignarArtistasAObra(catalogo, artista)
+    
+    return nuevoArtista
+
+
+def asignarArtistasAObra(catalogo, artista):
+    
+    entry = mp.get(catalogo['id_obras'], artista['ConstituentID'])
+    
+    if entry == None:
+        lista = []
+    else:
+        lista = me.getValue(entry)
+                
+    return lista
+
+
+def agregarObra1(catalogo, obra):
+    
+    existe = mp.contains(catalogo['obras'], obra['Title'])
+    
+    if existe:
+        return
+    else:
+        nuevaObra = crearObra1(catalogo, obra)
+        mp.put(catalogo['obras'], obra['Title'], nuevaObra)
+        
+        
+def crearObra1(catalogo, obra):
+    
+    nuevaObra = {'id': obra['ConstituentID'],
+                 'titulo': obra['Title'],
+                 'medio': obra['Medium'],
+                 'departamento': obra['Department'], 
+                 'fecha_adquisicion': obra['DateAcquired'],
+                 'altura': obra['Height (cm)'], 
+                 'largo': obra['Length (cm)'],
+                 'ancho': obra['Width (cm)'], 
+                 'peso': obra['Weight (kg)'],
+                 }
+    
+    return nuevaObra
+        
+
+def agregarNacimiento(catalogo, artista):
+    
+    existe = mp.contains(catalogo['nacimientos'], artista['fecha_nacimiento'])
+    entry_artistas = mp.get(catalogo['artistas'], artista['nombre'])
+    info_artistas = me.getValue(entry_artistas)
+    
+    if existe:
+        entry = mp.get(catalogo['nacimientos'], artista['fecha_nacimiento'])
+        lista_nacimientos = me.getValue(entry)
+        lt.addLast(lista_nacimientos, info_artistas)
+
+    else:
+        lista = lt.newList(datastructure='ARRAY_LIST')
+        lt.addLast(lista, info_artistas)
+        mp.put(catalogo['nacimientos'], artista['fecha_nacimiento'], lista)
+        
+        
+def agregarNacionalidad(catalogo, artista):
+    
+    existe = mp.contains(catalogo['nacionalidades'], artista['nacionalidad'])
+    entry_artistas = mp.get(catalogo['artistas'], artista['nombre'])
+    info_artistas = me.getValue(entry_artistas)
+    
+    if existe:
+        entry = mp.get(catalogo['nacionalidades'], artista['nacionalidad'])
+        lista_nacionalidades = me.getValue(entry)
+        lt.addLast(lista_nacionalidades, info_artistas)
+
+    else:
+        lista = lt.newList(datastructure='ARRAY_LIST')
+        lt.addLast(lista, info_artistas)
+        mp.put(catalogo['nacionalidades'], artista['nacionalidad'], lista)
+        
+
+def agregarFechaAdquisicion(catalogo, obra):
+    
+    existe = mp.contains(catalogo['fechas_obras'], obra['fecha_adquisicion'])
+    entry_obras = mp.get(catalogo['obras'], obra['titulo'])
+    info_obras = me.getValue(entry_obras)
+    
+    if existe:
+        entry = mp.get(catalogo['fechas_obras'], obra['fecha_adquisicion'])
+        lista_fechas = me.getValue(entry)
+        lt.addLast(lista_fechas, info_obras)
+
+    else:
+        lista = lt.newList(datastructure='ARRAY_LIST')
+        lt.addLast(lista, info_obras)
+        mp.put(catalogo['fechas_obras'], obra['fecha_adquisicion'], lista)
+        
+
+def agregarMedio(catalogo, obra):
+    
+    existe = mp.contains(catalogo['medios'], obra['medio'])
+    entry_obras = mp.get(catalogo['obras'], obra['titulo'])
+    info_obras = me.getValue(entry_obras)
+    
+    if existe:
+        entry = mp.get(catalogo['medios'], obra['medio'])
+        lista_medios = me.getValue(entry)
+        lt.addLast(lista_medios, info_obras)
+
+    else:
+        lista = lt.newList(datastructure='ARRAY_LIST')
+        lt.addLast(lista, info_obras)
+        mp.put(catalogo['medios'], obra['medio'], lista)
+        
+        
+def agregarDepartamento(catalogo, obra):
+    
+    existe = mp.contains(catalogo['departamentos'], obra['departamento'])
+    entry_obras = mp.get(catalogo['obras'], obra['titulo'])
+    info_obras = me.getValue(entry_obras)
+    
+    if existe:
+        entry = mp.get(catalogo['departamentos'], obra['departamento'])
+        lista_departamentos = me.getValue(entry)
+        lt.addLast(lista_departamentos, info_obras)
+
+    else:
+        lista = lt.newList(datastructure='ARRAY_LIST')
+        lt.addLast(lista, info_obras)
+        mp.put(catalogo['departamentos'], obra['departamento'], lista)
+             
+             
+             
+        
+# Funciones para creacion de datos
+    
+def rangoArtistasPorAnho(catalogo, anho_inicial, anho_final):
+    
+    lista_info = lt.newList(datastructure='ARRAY_LIST')
+    
+    for anho in range(anho_inicial, anho_final+1):
+        llave_anho = str(anho)
+        entry = mp.get(catalogo['nacimientos'], llave_anho)
+        valores_anho = me.getValue(entry)
+        lt.addLast(lista_info, valores_anho)
+        
+    return lista_info
+
+
+
 
 # Funciones de consulta
 
@@ -180,8 +362,6 @@ def darPesoTotalDepartamento(lista_obras):
 
 def compararFechasArtistas(datos, anho_inicial, anho_final, tipo_lista):
     
-    #listaArtistas = lt.getElement(datos['artistas'],0)
-    #listaArtistas = datos['artistas']['elements']
     listaInfo = lt.newList(tipo_lista)
     
     for i in lt.iterator(datos['artistas']):
@@ -390,30 +570,6 @@ def agregarArtistaPorId(datos, datosArtistas):
                     i['artista'] = 'Unknown'
                 
     return datos
-    
-    #for i in lt.iterator(datos):   
-     #   artistas = []
-      #  for j in lt.iterator(datosArtistas):
-            
-       #     if len(i['id']) > 8:
-        #        lista = (i['id'][1:-1]).split(',')
-         #       print(lista)
-                
-          #      for n in lista:
-           #        if (j['nombre'] != ""):
-            #          if n == j['id']:
-             #               artistas.append(j['nombre'])
-              #  i['artista'] = artistas
-               # break
-            
-            #elif (j['nombre'] != ""):
-             #   if i['id'][1:-1] == j['id']:
-              #      i['artista'] = j['nombre']
-               #     break
-            #else:
-             #   i['artista'] = 'Unknown'
-   
-    #return datos
             
     
 # Funciones utilizadas para comparar elementos dentro de una lista
@@ -608,3 +764,15 @@ def calcularCostoTransporteObra(obra):
     else:
         obra['costo_transporte']=costo_mayor
         return costo_mayor
+
+
+def compararFechasNacimiento(anho_nacimiento, entry):
+    
+    anentry = me.getKey(entry)
+    if (int(anho_nacimiento) == int(anentry)):
+        return 0
+    elif (int(anho_nacimiento) > int(anentry)):
+        return 1
+    else:
+        return -1
+    

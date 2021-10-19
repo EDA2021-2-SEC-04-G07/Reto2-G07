@@ -24,6 +24,8 @@ from App.model import calcularCostoTransporteObra
 import config as cf
 import model
 import csv
+from DISClib.ADT import map as mp
+from DISClib.ADT import list as lt
 
 
 """
@@ -31,6 +33,94 @@ El controlador se encarga de mediar entre la vista y el modelo.
 """
 
 # Inicialización del Catálogo 
+
+def initCatalogo1():
+    return model.crearCatalogo1()
+
+
+def cargarDatos1(catalogo):
+       
+    #cargarDatosArtistas(catalogo)
+    #cargarDatosObras(catalogo)
+    cargarObras1(catalogo)
+    cargarArtistas1(catalogo)
+    agregarNacimientoYNacionalidad(catalogo)
+    agregarFechaAdquisicionMedioYDepartamento(catalogo)
+    
+    
+def cargarDatosArtistas(catalogo):
+    
+    archivoArtistas = cf.data_dir + 'Artists-utf8-small.csv'
+
+    input_file=csv.DictReader(open(archivoArtistas, encoding='utf8'))
+    
+    for artista in input_file:
+        model.agregarDatoArtista(catalogo, artista)
+        
+def cargarDatosObras(catalogo):
+    
+    archivoObras=cf.data_dir + 'Artworks-utf8-small.csv'
+    input_file=csv.DictReader(open(archivoObras, encoding='utf8'))
+    
+    for obra in input_file:
+        model.agregarDatoObra(catalogo, obra)
+    
+    
+def cargarArtistas1(catalogo):
+    
+    archivoArtistas = cf.data_dir + 'Artists-utf8-small.csv'
+
+    input_file=csv.DictReader(open(archivoArtistas, encoding='utf8'))
+    
+    for artista in input_file:
+        model.agregarArtista1(catalogo, artista)
+  
+
+def cargarObras1(catalogo):
+    
+    archivoObras=cf.data_dir + 'Artworks-utf8-small.csv'
+    input_file=csv.DictReader(open(archivoObras, encoding='utf8'))
+        
+    for obra in input_file:
+        model.agregarObra1(catalogo, obra)
+        model.agregarIdObra(catalogo, obra)
+           
+        
+def agregarNacimientoYNacionalidad(catalogo):
+    
+    lista_artistas = mp.valueSet(catalogo['artistas'])
+    
+    for artista in lt.iterator(lista_artistas):
+        model.agregarNacimiento(catalogo, artista)
+        model.agregarNacionalidad(catalogo, artista)
+        
+        
+def agregarFechaAdquisicionMedioYDepartamento(catalogo):
+    
+    obras = mp.valueSet(catalogo['obras'])
+    
+    for obra in lt.iterator(obras):
+        model.agregarFechaAdquisicion(catalogo, obra)
+        model.agregarMedio(catalogo, obra)
+        model.agregarDepartamento(catalogo, obra)
+        
+
+def rangoArtistasPorAnho(catalogo, anho_inicial, anho_final):
+    return model.rangoArtistasPorAnho(catalogo, anho_inicial, anho_final)
+        
+
+        
+        
+
+
+
+
+
+
+
+
+
+
 
 def initCatalogo(tipo_lista):
     """
@@ -46,11 +136,10 @@ def cargarDatos(catalogo):
     cargarObras(catalogo)
 
 def cargarArtistas(catalogo):
-    archivoArtistas=cf.data_dir + 'Artists-utf8-small.csv'
+    archivoArtistas = cf.data_dir + 'Artists-utf8-small.csv'
     #archivoArtistas='D:\Descargas\Repositorio GitHub\Reto1-G07\Data\Artists-utf8-small.csv'
     input_file=csv.DictReader(open(archivoArtistas, encoding='utf8'))
     for artista in input_file:
-        #print(artista)
         model.agregarArtista(catalogo, artista)   
 
 def cargarObras(catalogo):
