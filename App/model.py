@@ -76,8 +76,6 @@ def crearCatalogo1():
     return catalogo
 
 
-
-
 # Funciones para agregar informacion al catalogo
 
 def agregarIdObra(catalogo, obra):
@@ -129,8 +127,35 @@ def agregarDatoArtista(catalogo, artista):
     lt.addLast(catalogo['datos_artistas'], artista)
     
     
-def nuevoDatoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad, genero):
+#def agregarNacionalidad(catalogo, obra):
+ #   lista_id_artistas = lt.newList('ARRAY_LIST')
+   # x = obra['ConstituentID']
+    #characters = "[] "
+    #for s in range(len(characters)):
+     #   x = x.replace(characters[s],"")       
     
+    #lista = x.split(',')
+    #for a in lista:
+     #       lt.addLast(lista_id_artistas, a)
+            
+    
+#def nuevoDatoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad, genero):
+    
+    for i in lt.iterator(lista_id_artistas):
+        nacionalidad = consultarNacionalidad(catalogo, int(i))
+        existeNacionalidad = mp.contains(catalogo['nacionalidades'], nacionalidad)
+        if existeNacionalidad:
+            entri = mp.get(catalogo['nacionalidades'], nacionalidad)
+            entry = me.getValue(entri)
+        else:
+            entry = lt.newList('ARRAY_LIST')
+            mp.put(catalogo['nacionalidades'], nacionalidad, entry)
+        lt.addLast(entry, obra)
+    
+        
+# Funciones para creacion de datos
+
+def nuevoDatoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad, genero):
     artista={'id':"", 'nombre':"", 'fecha_nacimiento':"", 'fecha_muerte':"", 'nacionalidad':"", 'genero':""}
     artista['id'] = id
     artista['nombre'] = nombre
