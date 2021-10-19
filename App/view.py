@@ -35,8 +35,7 @@ assert cf
 """
 La vista se encarga de la interacción con el usuario
 Presenta el menu de opciones y por cada seleccion
-se hace la solicitud al controlador para ejecutar la
-operación solicitada
+se hace la solicitud al controlador para ejecutar la operación solicitada
 """
 
 def printMenu():
@@ -81,17 +80,6 @@ while True:
 
         catalogo = controller.initCatalogo1()
         cargarDatos1(catalogo)
-        
-        #for i in lt.iterator(catalogo['obras']):
-         #   for j in lt.iterator(catalogo['artistas']):     
-          #      if i['id'] == j['id']:
-           #         i['nacionalidad'] = j['nacionalidad']
-            #        break
-                
-        #controller.cargarNacionalidadesObras(catalogo)
-
-        #catalogo = controller.initCatalogo(tipo_lista = 'ARRAY_LIST')
-        #cargarDatos(catalogo)
         tiempo_final = time.process_time()
         duracion = (tiempo_final - tiempo_inicial)*1000
         
@@ -208,21 +196,10 @@ while True:
         print('El tiempo de ejecución fue de: ', duracion, ' ms.')
         
         input()
-        system("cls")
+        system("cls")  
         
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-
-    elif int(inputs[0]) == 8:
+    #elif int(inputs[0]) == 3:
         
         medio = input('Digite el medio a analizar: ')
         n = int(input('Digite el número de obras que quiere analizar: '))        
@@ -247,8 +224,11 @@ while True:
 
         input()
         system("cls")
-        
-    elif int(inputs[0]) == 3:
+
+    if int(inputs[0]) == 4:
+        input()
+
+    if int(inputs[0]) == 5:
         nacionalidad = input("Escriba la nacionalidad: ")
         lista_nacionalidades = catalogo['nacionalidades']
         entri = mp.get(lista_nacionalidades, nacionalidad)
@@ -257,7 +237,10 @@ while True:
         input()
         system("cls")
 
+    if int(inputs[0]) == 6:
+        input()
+
     else:
         system("cls")
-        sys.exit(0)
+
 sys.exit(0)
