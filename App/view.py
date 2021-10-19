@@ -35,16 +35,16 @@ assert cf
 """
 La vista se encarga de la interacción con el usuario
 Presenta el menu de opciones y por cada seleccion
-se hace la solicitud al controlador para ejecutar la
-operación solicitada
+se hace la solicitud al controlador para ejecutar la operación solicitada
 """
 
 def printMenu():
     system("cls")
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
-    print("2- Dar las n obras mas antiguas de un medio especifico")
-    print("3- Contar el número de obras de una nacionalidad")
+    print("2- Listar cronologicamente los aristas")
+    print("3- Dar las n obras mas antiguas de un medio especifico")
+    print("5- Contar el número de obras de una nacionalidad")
 
 catalogo = None
 
@@ -73,22 +73,9 @@ while True:
 
         catalogo = controller.initCatalogo1()
         cargarDatos1(catalogo)
-        
-        #for i in lt.iterator(catalogo['obras']):
-         #   for j in lt.iterator(catalogo['artistas']):     
-          #      if i['id'] == j['id']:
-           #         i['nacionalidad'] = j['nacionalidad']
-            #        break
-                
-        #controller.cargarNacionalidadesObras(catalogo)
-
-        #catalogo = controller.initCatalogo(tipo_lista = 'ARRAY_LIST')
-        #cargarDatos(catalogo)
         tiempo_final = time.process_time()
         duracion = (tiempo_final - tiempo_inicial)*1000
         system("cls")
-        print(f"El tiempo de carga de datos es: {duracion} milisegundos")
-        input()
         
     elif int(inputs[0]) == 2:
         
@@ -126,9 +113,7 @@ while True:
         input()
         system("cls")
         
-        
-
-    elif int(inputs[0]) == 8:
+    if int(inputs[0]) == 3:
         
         medio = input('Digite el medio a analizar: ')
         n = int(input('Digite el número de obras que quiere analizar: '))        
@@ -153,8 +138,11 @@ while True:
 
         input()
         system("cls")
-        
-    elif int(inputs[0]) == 3:
+
+    if int(inputs[0]) == 4:
+        input()
+
+    if int(inputs[0]) == 5:
         nacionalidad = input("Escriba la nacionalidad: ")
         lista_nacionalidades = catalogo['nacionalidades']
         entri = mp.get(lista_nacionalidades, nacionalidad)
@@ -163,7 +151,10 @@ while True:
         input()
         system("cls")
 
+    if int(inputs[0]) == 6:
+        input()
+
     else:
         system("cls")
-        sys.exit(0)
+
 sys.exit(0)
