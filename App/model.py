@@ -213,15 +213,22 @@ def crearArtista1(catalogo, artista):
         nacimiento_final = lista_nacimiento_final[0] 
     
     nuevoArtista = {'id': artista['ConstituentID'],
+                    'num_prolifico': None,
                     'nombre': artista['DisplayName'],
                     'fecha_nacimiento': nacimiento_final,
                     'fecha_muerte': artista['EndDate'],
                     'nacionalidad': artista['Nationality'],
                     'genero': artista['Gender'],
-                    'obras': None
+                    'obras': None,
                     }
     
     nuevoArtista['obras'] = asignarArtistasAObra(catalogo, artista)
+    temp = nuevoArtista['obras']
+    
+    if lt.size(temp) == 0:
+        nuevoArtista['num_prolifico'] = 0
+    else:
+        nuevoArtista['num_prolifico'] = lt.size(temp)
     
     return nuevoArtista
 
@@ -231,7 +238,7 @@ def asignarArtistasAObra(catalogo, artista):
     entry = mp.get(catalogo['id_obras'], artista['ConstituentID'])
     
     if entry == None:
-        lista = []
+        lista = lt.newList(datastructure='ARRAY_LIST')
     else:
         lista = me.getValue(entry)
                 
@@ -641,6 +648,13 @@ def cmpArtistaPorNacimiento(artista1, artista2):
     else:
         return False
     
+def cmpNumProlifico(artista1, artista2):
+    
+    if int(artista1['num_prolifico']) > int(artista2['num_prolifico']):
+        return True
+    else:
+        return False
+    
 def cmpObrasPorFecha(obra1, obra2):
     
     if (int(obra1['fecha']) < int(obra2['fecha'])):
@@ -668,6 +682,8 @@ def insertion(datos, identificador):
         lista_ordenada = ist.sort(datos, cmpArtworkByDateAcquired)
     elif identificador == 4:
         lista_ordenada = ist.sort(datos, cmpObrasPorCostoTransporte)
+    elif identificador == 5:
+        lista_ordenada = ist.sort(datos, cmpNumProlifico)
         
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
@@ -685,6 +701,8 @@ def shell(datos, identificador):
         lista_ordenada = sst.sort(datos, cmpArtworkByDateAcquired)
     elif identificador == 4:
         lista_ordenada = sst.sort(datos, cmpObrasPorCostoTransporte)
+    elif identificador == 5:
+        lista_ordenada = sst.sort(datos, cmpNumProlifico)
         
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
@@ -702,6 +720,8 @@ def merge(datos, identificador):
         lista_ordenada = mst.sort(datos, cmpArtworkByDateAcquired)
     elif identificador == 4:
         lista_ordenada = mst.sort(datos, cmpObrasPorCostoTransporte)
+    elif identificador == 5:
+        lista_ordenada = mst.sort(datos, cmpNumProlifico)
 
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000
@@ -719,6 +739,8 @@ def quicksort(datos, identificador):
         lista_ordenada = qst.sort(datos, cmpArtworkByDateAcquired)
     elif identificador == 4:
         lista_ordenada = qst.sort(datos, cmpObrasPorCostoTransporte)
+    elif identificador == 5:
+        lista_ordenada = qst.sort(datos, cmpNumProlifico)
 
     tiempo_final = time.process_time()
     duracion = (tiempo_final - tiempo_inicial)*1000

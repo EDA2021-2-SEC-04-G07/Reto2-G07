@@ -225,10 +225,8 @@ while True:
         input()
         system("cls")
 
-    if int(inputs[0]) == 4:
-        input()
 
-    if int(inputs[0]) == 5:
+    elif int(inputs[0]) == 5:
         nacionalidad = input("Escriba la nacionalidad: ")
         lista_nacionalidades = catalogo['nacionalidades']
         entri = mp.get(lista_nacionalidades, nacionalidad)
@@ -237,10 +235,94 @@ while True:
         input()
         system("cls")
 
-    if int(inputs[0]) == 6:
+    elif int(inputs[0]) == 6:
         input()
-
-    else:
         system("cls")
+        
+    elif int(inputs[0]) == 7:
+        
+        numero_artistas = int(input("Digite el número de artistas que desea en la clasificación: "))
+        anho_inicial = int(input("Digite el año inicial: "))
+        anho_final = int(input("Digite el año final: "))
+        
+        rango_artistas = controller.rangoArtistasPorAnho(catalogo, anho_inicial, anho_final)
+        lista_final = lt.newList(datastructure='ARRAY_LIST')
+        
+        for i in lt.iterator(rango_artistas):
+            for j in lt.iterator(i):
+                lt.addLast(lista_final, j)
+            
+        info_artista_ordenada = controller.llamarShell(lista_final, identificador=5)
+        
+        lista_prolificos = lt.subList(info_artista_ordenada[1], 1, numero_artistas)
+        temp1 = lt.getElement(lista_prolificos, 1)
+        id_mas_prolifico = temp1['id']
+        lista_id = lt.newList(datastructure='ARRAY_LIST')
+        lt.addLast(lista_id, id_mas_prolifico)
+        
+        print('\t Nombre \t |Fecha de nacimiento|    Género    |    \t\t Total obras  |  Total técnicas   |  Técnica mayor')  
+        print('=================================================================================================')     
+        
+        for i in lt.iterator(lista_prolificos):
+            listax = i['obras']
+            lista_medio = lt.newList(datastructure='ARRAY_LIST')
+            lista_todos_medios = []
+            
+            for j in lt.iterator(listax):
+                entry = mp.get(catalogo['obras'], j)
+                info_obra = me.getValue(entry)
+                medio = info_obra['medio']
+                
+                if lt.isPresent(lista_medio, medio) == 0:      
+                    lt.addLast(lista_medio, medio)
+                    
+                lista_todos_medios.append(medio)
+                
+            mayor = 0
+            medio_mayor = None
+            
+            for n in lt.iterator(lista_medio):
+                cont = lista_todos_medios.count(n)
+                if cont > mayor:
+                    mayor = cont
+                    medio_mayor = n
+                    
+            temp = lt.isPresent(lista_id, i['id'])
+            if  temp == 1:
+                medio_mas_prolifico = medio_mayor
+                    
+            print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['nombre'], i['fecha_nacimiento'], i['genero'], lt.size(i['obras']), mayor, medio_mayor))
+            
+        artista_mas_prolifico = lt.getElement(lista_prolificos, 1)
+        obras_prolifico = artista_mas_prolifico['obras']
+        lista_mas_prolifico = lt.newList(datastructure='ARRAY_LIST')
+        
+        for i in lt.iterator(obras_prolifico):
+            entry1 = mp.get(catalogo['obras'], i)
+            info_obra_1 = me.getValue(entry1)
+            medio = info_obra_1['medio']
+            
+            if medio == medio_mas_prolifico:
+                lt.addLast(lista_mas_prolifico, info_obra_1)
+                
+        print('{} con MoMA ID {} tiene {} obras a su nombre en el museo'.format(artista_mas_prolifico['nombre'], artista_mas_prolifico['id'], artista_mas_prolifico['num_prolifico']))  
+        print('A continuación se muestran las 5 primeras obras ordenadas por fecha de adquisición: \n') 
+        print('\Título \t |Fecha de la obra|    Fecha de adquisicion    |    \t\t Departamento  |   Dimensiones   |')  
+        print('===========================================================================================================')  
+        
+        if lt.size(lista_mas_prolifico) <= 5:
+            for i in lt.iterator(lista_mas_prolifico):
+                print('{}\t   {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['fecha_obra'], i['fecha_adquisicion'], i['departamento'], i['dimensiones']))
+        else:
+            sublista_prolificos = lt.subList(lista_mas_prolifico, 1, 5)
+            sublista_prolificos_ordenada = controller.llamarQuicksort(sublista_prolificos, identificador=3)
+            
+            for i in lt.iterator(sublista_prolificos_ordenada[1]):
+                print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['fecha'], i['fecha_adquisicion'], i['medio'], i['departamento'], i['dimensiones']))
+                
+        input()
+        system("cls")
+            
+        
 
 sys.exit(0)
