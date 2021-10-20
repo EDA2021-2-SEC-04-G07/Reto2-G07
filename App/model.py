@@ -172,7 +172,7 @@ def agregarDatoObra(catalogo, obra):
     
 def nuevoDatoObra(id, objectId, titulo, fecha, tecnica, departamento, fecha_adquisicion, altura, ancho, peso, linea, dimensiones, diametro, largo, clasificacion):
     
-    obra={'id':"", 'objectId':"", 'titulo':"", 'fecha':"", 'tecnica':"", 'departamento':"", 'fecha_adquisicion':"", 'altura':"", 'ancho':"", 'peso':"", 'linea_adquisicion':"", 'dimensiones':"", 'diametro':"", 'largo':""}
+    obra={'id':"", 'objectId':"", 'titulo':"", 'fecha':"", 'tecnica':"", 'departamento':"", 'fecha_adquisicion':"", 'altura':"", 'ancho':"", 'peso':"", 'linea_adquisicion':"", 'dimensiones':"", 'diametro':"", 'largo':"", 'clasifiacion':""}
     obra['id']=id
     obra['objectId'] = objectId
     obra['titulo']=titulo
@@ -263,10 +263,12 @@ def crearObra1(catalogo, obra):
                  'fecha_adquisicion': obra['DateAcquired'],
                  'linea_adquisicion': obra['CreditLine'],
                  'dimensiones': obra['Dimensions'],
+                 'diametro': obra['Diameter (cm)'],
                  'altura': obra['Height (cm)'], 
                  'largo': obra['Length (cm)'],
                  'ancho': obra['Width (cm)'], 
                  'peso': obra['Weight (kg)'],
+                 'clasificacion': obra['Classification'],
                  }
     
     return nuevaObra

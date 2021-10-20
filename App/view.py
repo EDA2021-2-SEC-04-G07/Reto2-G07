@@ -158,6 +158,7 @@ while True:
         numero_elementos = lt.size(lista_rango)
 
         lista = controller.llamarMerge(lista_rango, identificador)[1]
+
         primeros_3 = lt.subList(lista, 1, 3)
         ultimos_3 = lt.subList(lista, lt.size(lista)-4, 3)
         print("El número total de obras adquiridas por compra es de : " + str(controller.obrasAdquiridasPorCompra(lista)))
@@ -167,13 +168,13 @@ while True:
         print('        Título         |    Fecha    |     Medio     |       Dimensiones       ')
         print('==================================================================================================')
         for i in lt.iterator(primeros_3):
-            print('{} \t\t\t {}  \t\t    {}   \t  {}'.format(i['titulo'], i['fecha'], i['medio'], i['dimensiones']))
+            print('{} \t\t\t {}  \t\t    {}   \t  {}'.format(i['titulo'], i['fecha_adquisicion'], i['medio'], i['dimensiones']))
         print('')
         print('Los tres últimos elementos son:')
         print('        Título         |    Fecha    |     Medio     |       Dimensiones       ')
         print('==================================================================================================')
         for i in lt.iterator(ultimos_3):
-            print('{} \t\t\t {}  \t\t    {}   \t  {}'.format(i['titulo'], i['fecha'], i['medio'], i['dimensiones']))
+            print('{} \t\t\t {}  \t\t    {}   \t  {}'.format(i['titulo'], i['fecha_adquisicion'], i['medio'], i['dimensiones']))
         print(' ')
         #print('El tiempo de ejecución fue de: ', tiempo, ' ms.')
 
@@ -280,6 +281,38 @@ while True:
         system("cls")
 
     elif int(inputs[0]) == 6:
+
+        departamento = input("Escriba el departamento del museo a analizar: ")
+        entry = mp.get(catalogo['departamentos'], departamento)
+        lista_obras_departamento = me.getValue(entry)
+
+        print('El número de obras en el departamento es: ' + str(lt.size(lista_obras_departamento)))
+        costo = controller.llamarDarPrecioTransporteDepartamento(lista_obras_departamento)
+        print('El costo de transportar todo el departamento de obras es de: ' + str(round(costo, 2)) + ' USD')
+        peso_total = controller.llamarDarPesoTotalDepartamento(lista_obras_departamento)
+        print('El peso total de las obras del departamento es de: ' + str(peso_total) + 'Kg')
+        lista_ordenada = controller.llamarMerge(lista_obras_departamento, 3)
+        tiempo1 = lista_ordenada[0]
+        antiguas5 = lt.subList(lista_ordenada[1], 1, 5)
+        
+        print('Las 5 obras mas antiguas son:')
+        print('\tTítulo \t |   Clasificación   |    Fecha de la obra   |    Técnica    |  \t\t Dimensiones   | Costo Asociado ')  
+        print('===============================================================================================================')
+        for i in lt.iterator(antiguas5):
+            print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['clasificacion'], i['fecha_adquisicion'], i['medio'], i['dimensiones'], i['costo_transporte']))
+        print(' ')
+        lista_obras_ordenadas_costo = controller.llamarMerge(lista_ordenada[1], 4)
+        costosas5 = lt.subList(lista_obras_ordenadas_costo[1], (lt.size(lista_obras_ordenadas_costo[1])- 4), 5)
+        tiempo2 = lista_obras_ordenadas_costo[0]
+        print('Las 5 obras mas costosas para transportar son:')
+        print('\tTítulo \t |   Clasificación   |    Fecha de la obra   |    Técnica    |  \t\t Dimensiones   | Costo Asociado ')  
+        print('===============================================================================================================')
+        for i in lt.iterator(costosas5):
+            print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['clasificacion'], i['fecha_adquisicion'], i['medio'], i['dimensiones'], i['costo_transporte']))
+        print('')
+        tiempo_total = tiempo1 + tiempo2
+        print('El tiempo de ejecución fue de: ',tiempo_total, ' ms.')
+
         input()
         system("cls")
         
