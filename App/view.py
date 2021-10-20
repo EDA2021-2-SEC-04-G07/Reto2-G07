@@ -25,6 +25,7 @@ import sys
 from os import system
 from datetime import date, time, datetime
 import time
+import operator
 from DISClib.ADT import map as mp
 from DISClib.DataStructures import mapentry as me
 from App import controller
@@ -84,10 +85,8 @@ while True:
         duracion = (tiempo_final - tiempo_inicial)*1000
         
         print(f"El tiempo de carga de datos es: {duracion} milisegundos")
-        input()
-        system("cls")
         
-        
+        system("cls")    
 
     elif int(inputs[0]) == 2:
         
@@ -130,13 +129,56 @@ while True:
 
         input()
         system("cls")
-        
-        
-        
+             
     elif int(inputs[0]) == 3:
-        pass
-    
-    
+        fecha_inicial_texto = input('Escriba la fecha inicial: ')
+        fecha_inicial = datetime.strptime(fecha_inicial_texto, '%Y-%m-%d')
+        fecha_final_texto = input('Escriba la fecha final: ')
+        fecha_final = datetime.strptime(fecha_final_texto, '%Y-%m-%d')
+        datosArtistas = catalogo['artistas']
+        datos = catalogo['obras']
+        identificador = 3
+        #resultado = controller.llamarShell(datos, identificador)   
+        #dic=resultado[1]
+        #tiempo = resultado[0]
+        key_obras = mp.keySet(catalogo['obras'])
+        print('============================================')
+        lista_rango=lt.newList('ARRAY_LIST')
+        
+        for key in lt.iterator(key_obras):
+            entry = mp.get(catalogo['obras'], key)
+            elemento = me.getValue(entry)
+            if elemento['fecha_adquisicion']=='':
+                pass
+            else:
+                fecha_elemento=datetime.strptime(elemento['fecha_adquisicion'], '%Y-%m-%d')
+                if fecha_elemento > fecha_inicial and fecha_elemento < fecha_final:
+                  lt.addLast(lista_rango, elemento)
+
+        numero_elementos = lt.size(lista_rango)
+
+        lista = controller.llamarMerge(lista_rango, identificador)[1]
+        primeros_3 = lt.subList(lista, 1, 3)
+        ultimos_3 = lt.subList(lista, lt.size(lista)-4, 3)
+        print("El número total de obras adquiridas por compra es de : " + str(controller.obrasAdquiridasPorCompra(lista)))
+        print('El número de elementos en el rango es: ' + str(numero_elementos))
+        print(' ')
+        print('Los tres primeros elementos son:')
+        print('        Título         |    Fecha    |     Medio     |       Dimensiones       ')
+        print('==================================================================================================')
+        for i in lt.iterator(primeros_3):
+            print('{} \t\t\t {}  \t\t    {}   \t  {}'.format(i['titulo'], i['fecha'], i['medio'], i['dimensiones']))
+        print('')
+        print('Los tres últimos elementos son:')
+        print('        Título         |    Fecha    |     Medio     |       Dimensiones       ')
+        print('==================================================================================================')
+        for i in lt.iterator(ultimos_3):
+            print('{} \t\t\t {}  \t\t    {}   \t  {}'.format(i['titulo'], i['fecha'], i['medio'], i['dimensiones']))
+        print(' ')
+        #print('El tiempo de ejecución fue de: ', tiempo, ' ms.')
+
+        input()
+        system("cls") 
     
     elif int(inputs[0]) == 4:
         
@@ -197,41 +239,43 @@ while True:
         
         input()
         system("cls")  
-        
-        
-    #elif int(inputs[0]) == 3:
-        
-        medio = input('Digite el medio a analizar: ')
-        n = int(input('Digite el número de obras que quiere analizar: '))        
-        datos = catalogo.copy()
-
-        if mp.contains(catalogo['medios'], medio):
-            entry = mp.get(catalogo['medios'], medio)
-            obras_medio = me.getValue(entry)
-            lista_obras = obras_medio['obras']
-            controller.llamarOrdenarObras(lista_obras, 3) 
-            a=0
-            print(f'Las {n} obras mas antiguas de este medio son :\n')
-            for obra in lt.iterator(lista_obras):
-                print(obra)
-                a=a+1
-                if a == n:
-                    break                
-        else:
-            print('Ese medio no se encuentra en el museo')
-            input()
-            break
-
-        input()
-        system("cls")
-
 
     elif int(inputs[0]) == 5:
-        nacionalidad = input("Escriba la nacionalidad: ")
+
         lista_nacionalidades = catalogo['nacionalidades']
-        entri = mp.get(lista_nacionalidades, nacionalidad)
-        lista_filtrada = me.getValue(entri)
-        print('Existen {} obras en la nacionalidad mencionada'.format(lt.size(lista_filtrada)))
+        lista_llaves = mp.keySet(lista_nacionalidades)
+
+        dic = {}
+
+        for i in lt.iterator(lista_llaves):
+            entry = mp.get(catalogo['nacionalidades'], i)
+            info = me.getValue(entry)
+            dic[i]=lt.size(info)
+        
+        dic_sort = sorted(dic.items(), key=operator.itemgetter(1), reverse=True)
+        
+        print('Las 10 nacionalidades con más obras son:')
+
+        for i in range(10):
+            print(dic_sort[i])
+
+        lista_obras = lt.newList('ARRAY_LIST')
+
+        if dic_sort[0].__contains__(''):
+            nacionalidad_dic = dic_sort[1]
+        else:
+            nacionalidad_dic = dic_sort[0]
+        
+        nacionalidad = str(nacionalidad_dic[0])
+
+        entry_nacionalidad = mp.get(catalogo['nacionalidades'], nacionalidad)
+        artistas_nacionalidad = me.getValue(entry_nacionalidad)
+        lista = controller.llamarBuscarObrasPorNacionalidad(catalogo, nacionalidad)
+        print('Las primeras 3 obras')
+        print(lt.subList(lista,1,3))
+        print('')
+        print('Las ultimas 3 obras')
+        print(lt.subList(lista,lt.size(lista)-4,3))       
         input()
         system("cls")
 

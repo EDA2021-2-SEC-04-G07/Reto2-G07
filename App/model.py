@@ -50,8 +50,7 @@ los mismos.
     
 def crearCatalogo1():
     
-    catalogo = {#'datos_artistas': None,
-                #'datos_obras': None,
+    catalogo = {
                 'id_obras': None,
                 'artistas': None,
                 'obras': None,
@@ -62,8 +61,6 @@ def crearCatalogo1():
                 'departamentos': None,
                 }
     
-    #catalogo['datos_artistas'] = lt.newList(datastructure='ARRAY_LIST')
-    #catalogo['datos_obras'] = lt.newList(datastructure='ARRAY_LIST')
     catalogo['id_obras'] = mp.newMap()
     catalogo['artistas'] = mp.newMap()
     catalogo['obras'] = mp.newMap()
@@ -141,16 +138,16 @@ def agregarDatoArtista(catalogo, artista):
     
 #def nuevoDatoArtista(id, nombre, fecha_nacimiento, fecha_muerte, nacionalidad, genero):
     
-    for i in lt.iterator(lista_id_artistas):
-        nacionalidad = consultarNacionalidad(catalogo, int(i))
-        existeNacionalidad = mp.contains(catalogo['nacionalidades'], nacionalidad)
-        if existeNacionalidad:
-            entri = mp.get(catalogo['nacionalidades'], nacionalidad)
-            entry = me.getValue(entri)
-        else:
-            entry = lt.newList('ARRAY_LIST')
-            mp.put(catalogo['nacionalidades'], nacionalidad, entry)
-        lt.addLast(entry, obra)
+    #for i in lt.iterator(lista_id_artistas):
+        #nacionalidad = consultarNacionalidad(catalogo, int(i))
+        #existeNacionalidad = mp.contains(catalogo['nacionalidades'], nacionalidad)
+        #if existeNacionalidad:
+            #entri = mp.get(catalogo['nacionalidades'], nacionalidad)
+            #entry = me.getValue(entri)
+        #else:
+            #entry = lt.newList('ARRAY_LIST')
+            #mp.put(catalogo['nacionalidades'], nacionalidad, entry)
+        #lt.addLast(entry, obra)
     
         
 # Funciones para creacion de datos
@@ -264,6 +261,7 @@ def crearObra1(catalogo, obra):
                  'medio': obra['Medium'],
                  'departamento': obra['Department'], 
                  'fecha_adquisicion': obra['DateAcquired'],
+                 'linea_adquisicion': obra['CreditLine'],
                  'dimensiones': obra['Dimensions'],
                  'altura': obra['Height (cm)'], 
                  'largo': obra['Length (cm)'],
@@ -450,10 +448,13 @@ def consultarId(datos, nombreArtista):
 
 def buscarObrasPorNacionalidad(datos, nacionalidad):
     info_obras = datos['obras']
-
+    keys_obras = mp.keySet(info_obras)
     lista_obras = lt.newList('ARRAY_LIST')    
 
-    for i in lt.iterator(info_obras):
+    for j in lt.iterator(keys_obras):
+
+        entry = mp.get(info_obras, j)
+        i = me.getValue(entry)
 
         x=i['id']
     
@@ -476,10 +477,12 @@ def consultarNacionalidad(datos, id):
 
     info_artistas = datos['artistas']
     nacionalidad = ""
-
-    for i in lt.iterator(info_artistas):
-        if i['id'] == str(id):
-            nacionalidad = i['nacionalidad']
+    keys_artistas = mp.keySet(info_artistas)
+    for i in lt.iterator(keys_artistas):
+        entri = mp.get(info_artistas, i)
+        artista = me.getValue(entri)
+        if artista['id'] == str(id):
+            nacionalidad = artista['nacionalidad']
             break
         
     return nacionalidad 
