@@ -290,10 +290,13 @@ while True:
             temp = lt.isPresent(lista_id, i['id'])
             if  temp == 1:
                 medio_mas_prolifico = medio_mayor
+                
+            i['numMedio'] = mayor
                     
             print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['nombre'], i['fecha_nacimiento'], i['genero'], lt.size(i['obras']), mayor, medio_mayor))
             
-        artista_mas_prolifico = lt.getElement(lista_prolificos, 1)
+        lista_prolificos_ordenada = controller.llamarQuicksort(lista_prolificos, identificador=5)
+        artista_mas_prolifico = lt.getElement(lista_prolificos_ordenada[1], 1)
         obras_prolifico = artista_mas_prolifico['obras']
         lista_mas_prolifico = lt.newList(datastructure='ARRAY_LIST')
         

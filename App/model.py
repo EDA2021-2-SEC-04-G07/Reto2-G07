@@ -650,10 +650,21 @@ def cmpArtistaPorNacimiento(artista1, artista2):
     
 def cmpNumProlifico(artista1, artista2):
     
+    if int(artista1['num_prolifico']) == int(artista2['num_prolifico']):
+        return cmpNumMedios(artista1, artista2)
+    
+    elif int(artista1['num_prolifico']) > int(artista2['num_prolifico']):
+        return True
+    else:
+        return False
+    
+def cmpNumMedios(artista1, artista2):
+    
     if int(artista1['num_prolifico']) > int(artista2['num_prolifico']):
         return True
     else:
         return False
+    
     
 def cmpObrasPorFecha(obra1, obra2):
     
