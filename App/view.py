@@ -41,9 +41,6 @@ se hace la solicitud al controlador para ejecutar la operación solicitada
 
 def printMenu():
     system("cls")
-    #print("1- Cargar información en el catálogo")
-    #print("2- Dar las n obras mas antiguas de un medio especifico")
-    #print("3- Contar el número de obras de una nacionalidad")
     
     print("Bienvenido")
     print("1- Cargar información en el catálogo")
@@ -131,6 +128,9 @@ while True:
         system("cls")
              
     elif int(inputs[0]) == 3:
+
+        tiempo_inicial = time.process_time()
+
         fecha_inicial_texto = input('Escriba la fecha inicial: ')
         fecha_inicial = datetime.strptime(fecha_inicial_texto, '%Y-%m-%d')
         fecha_final_texto = input('Escriba la fecha final: ')
@@ -138,9 +138,6 @@ while True:
         datosArtistas = catalogo['artistas']
         datos = catalogo['obras']
         identificador = 3
-        #resultado = controller.llamarShell(datos, identificador)   
-        #dic=resultado[1]
-        #tiempo = resultado[0]
         key_obras = mp.keySet(catalogo['obras'])
         print('============================================')
         lista_rango=lt.newList('ARRAY_LIST')
@@ -176,7 +173,9 @@ while True:
         for i in lt.iterator(ultimos_3):
             print('{} \t\t\t {}  \t\t    {}   \t  {}'.format(i['titulo'], i['fecha_adquisicion'], i['medio'], i['dimensiones']))
         print(' ')
-        #print('El tiempo de ejecución fue de: ', tiempo, ' ms.')
+        tiempo_final = time.process_time()
+        duracion = (tiempo_final - tiempo_inicial)*1000
+        print('El tiempo de ejecución fue de: ',duracion, ' ms.')
 
         input()
         system("cls") 
@@ -243,6 +242,8 @@ while True:
 
     elif int(inputs[0]) == 5:
 
+        tiempo_inicial = time.process_time()
+
         lista_nacionalidades = catalogo['nacionalidades']
         lista_llaves = mp.keySet(lista_nacionalidades)
 
@@ -271,12 +272,25 @@ while True:
 
         entry_nacionalidad = mp.get(catalogo['nacionalidades'], nacionalidad)
         artistas_nacionalidad = me.getValue(entry_nacionalidad)
-        lista = controller.llamarBuscarObrasPorNacionalidad(catalogo, nacionalidad)
-        print('Las primeras 3 obras')
-        print(lt.subList(lista,1,3))
+        lista1 = controller.llamarBuscarObrasPorNacionalidad(catalogo, nacionalidad)
+        lista = controller.llamarMerge(lista1,3)[1]
+        print('Los tres primeros elementos son:')
+        primeros_3=lt.subList(lista,1,3)
+        print('        Título         |    Fecha    |     Medio     |       Dimensiones       ')
+        print('==================================================================================================')
+        for i in lt.iterator(primeros_3):
+            print('{} \t\t\t {}  \t\t    {}   \t  {}'.format(i['titulo'], i['fecha_adquisicion'], i['medio'], i['dimensiones']))
         print('')
-        print('Las ultimas 3 obras')
-        print(lt.subList(lista,lt.size(lista)-4,3))       
+        ultimos_3=lt.subList(lista,lt.size(lista)-4,3)
+        print('Los tres últimos elementos son:')
+        print('        Título         |    Fecha    |     Medio     |       Dimensiones       ')
+        print('==================================================================================================')
+        for i in lt.iterator(ultimos_3):
+            print('{} \t\t\t {}  \t\t    {}   \t  {}'.format(i['titulo'], i['fecha_adquisicion'], i['medio'], i['dimensiones']))
+        print('')      
+        tiempo_final = time.process_time()
+        duracion = (tiempo_final - tiempo_inicial)*1000
+        print('El tiempo de ejecución fue de: ',duracion, ' ms.')
         input()
         system("cls")
 

@@ -50,7 +50,7 @@ def cargarDatos1(catalogo):
     
 def cargarDatosArtistas(catalogo):
     
-    archivoArtistas = cf.data_dir + 'Artists-utf8-small.csv'
+    archivoArtistas = cf.data_dir + 'Artists-utf8-large.csv'
 
     input_file=csv.DictReader(open(archivoArtistas, encoding='utf8'))
     
@@ -59,7 +59,7 @@ def cargarDatosArtistas(catalogo):
         
 def cargarDatosObras(catalogo):
     
-    archivoObras=cf.data_dir + 'Artworks-utf8-small.csv'
+    archivoObras=cf.data_dir + 'Artworks-utf8-large.csv'
     input_file=csv.DictReader(open(archivoObras, encoding='utf8'))
     
     for obra in input_file:
@@ -68,7 +68,7 @@ def cargarDatosObras(catalogo):
     
 def cargarArtistas1(catalogo):
     
-    archivoArtistas = cf.data_dir + 'Artists-utf8-small.csv'
+    archivoArtistas = cf.data_dir + 'Artists-utf8-large.csv'
 
     input_file=csv.DictReader(open(archivoArtistas, encoding='utf8'))
     
@@ -78,7 +78,7 @@ def cargarArtistas1(catalogo):
 
 def cargarObras1(catalogo):
     
-    archivoObras=cf.data_dir + 'Artworks-utf8-small.csv'
+    archivoObras=cf.data_dir + 'Artworks-utf8-large.csv'
     input_file=csv.DictReader(open(archivoObras, encoding='utf8'))
         
     for obra in input_file:
@@ -136,14 +136,14 @@ def cargarDatos(catalogo):
     cargarObras(catalogo)
 
 def cargarArtistas(catalogo):
-    archivoArtistas = cf.data_dir + 'Artists-utf8-small.csv'
+    archivoArtistas = cf.data_dir + 'Artists-utf8-large.csv'
     #archivoArtistas='D:\Descargas\Repositorio GitHub\Reto1-G07\Data\Artists-utf8-small.csv'
     input_file=csv.DictReader(open(archivoArtistas, encoding='utf8'))
     for artista in input_file:
         model.agregarArtista(catalogo, artista)   
 
 def cargarObras(catalogo):
-    archivoObras=cf.data_dir + 'Artworks-utf8-small.csv'
+    archivoObras=cf.data_dir + 'Artworks-utf8-large.csv'
     input_file=csv.DictReader(open(archivoObras, encoding='utf8'))
     for obra in input_file:
         model.agregarObra(catalogo, obra)

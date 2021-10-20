@@ -796,23 +796,23 @@ def calcularCostoTransporteObra(obra):
     if not obra['altura']:
         altura = 0
     else:
-        altura = Decimal(obra['altura'])/100
+        altura = float(Decimal(obra['altura'])/100)
     if not obra['largo']:
         largo = 0
     else:
-        largo = Decimal(obra['largo'])/100
+        largo = float(Decimal(obra['largo'])/100)
     if not obra['ancho']:
         ancho = 0
     else:
-        ancho = Decimal(obra['ancho'])/100
+        ancho = float(Decimal(obra['ancho'])/100)
     if not obra['peso']:
         peso = 0
     else:
-        peso = Decimal(obra['peso'])
+        peso = float((Decimal(obra['peso'])))
     if not obra['diametro']:
         diametro = 0
     else:
-        diametro = int(round(Decimal(obra['diametro'])/100))
+        diametro = float(Decimal(obra['diametro'])/100)
     
     #Calculo del peso
     if peso != 0:
@@ -820,7 +820,7 @@ def calcularCostoTransporteObra(obra):
 
     #Calculo del area
     if diametro != 0:
-        costo_area=(math.pi()*((diametro)/2)^2)*costo
+        costo_area=(math.pi*((diametro)/2.0)*(diametro/2.0))*float(costo)
     elif largo != 0 and ancho != 0:
         costo_area=(largo*ancho)*costo
     elif altura != 0 and ancho != 0:
@@ -828,7 +828,7 @@ def calcularCostoTransporteObra(obra):
 
     #Calculo del volumen
     if diametro != 0 and altura != 0:
-        costo_volumen=(math.pi()*((diametro)/2)^2*altura)*costo
+        costo_volumen=(math.pi*((diametro)/2.0)*(diametro/2.0)*float(altura))*float(costo)
     elif largo != 0 and ancho != 0 and altura != 0:
         costo_volumen=(largo*ancho*altura)*costo
 
