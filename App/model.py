@@ -383,7 +383,12 @@ def rangoArtistasPorAnho(catalogo, anho_inicial, anho_final):
         
         llave_anho = str(anho)
         entry = mp.get(catalogo['nacimientos'], llave_anho)
-        valores_anho = me.getValue(entry)
+        
+        if entry == None:
+            valores_anho = lt.newList(datastructure='ARRAY_LIST')
+            
+        else:
+            valores_anho = me.getValue(entry)
         lt.addLast(lista_info, valores_anho)
         
     return lista_info
@@ -678,6 +683,11 @@ def cmpNumMedios(artista1, artista2):
     
 def cmpObrasPorFecha(obra1, obra2):
     
+    if obra1['fecha'] == '':
+        obra1['fecha'] = 0
+    if obra2['fecha'] == '':
+        obra2['fecha'] = 0
+        
     if (int(obra1['fecha']) < int(obra2['fecha'])):
         return True
     else:

@@ -188,11 +188,11 @@ while True:
         
         entry_artista = mp.get(catalogo['artistas'], nombre_artista)
         info_artista = me.getValue(entry_artista)
-        obras_artista = info_artista['obras']
+        obras_artista = info_artista['obras']   
         info_obras = lt.newList(datastructure='ARRAY_LIST')
         idArtista = info_artista['id']
         lista_medios = lt.newList(datastructure='ARRAY_LIST')
-        lista_todos_medios = lt.newList(datastructure='ARRAY_LIST')
+        #lista_todos_medios = lt.newList(datastructure='ARRAY_LIST')
         lista_todos_medios = []
         
         for i in lt.iterator(obras_artista):
