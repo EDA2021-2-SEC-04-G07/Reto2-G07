@@ -74,6 +74,7 @@ def cargarArtistas1(catalogo):
     
     for artista in input_file:
         model.agregarArtista1(catalogo, artista)
+        model.agregarIDArtista(catalogo, artista)
   
 
 def cargarObras1(catalogo):

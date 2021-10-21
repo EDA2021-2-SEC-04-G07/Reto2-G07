@@ -59,6 +59,7 @@ def crearCatalogo1():
                 'medios': None,
                 'nacionalidades': None,
                 'departamentos': None,
+                'id_artistas': None,
                 }
     
     catalogo['id_obras'] = mp.newMap()
@@ -69,6 +70,7 @@ def crearCatalogo1():
     catalogo['fechas_obras'] = mp.newMap()
     catalogo['nacionalidades'] = mp.newMap()
     catalogo['departamentos'] = mp.newMap()
+    catalogo['id_artistas'] = mp.newMap()
     
     return catalogo
 
@@ -106,6 +108,16 @@ def agregarIdObra(catalogo, obra):
             lista_obras = lt.newList(datastructure='ARRAY_LIST')
             lt.addLast(lista_obras, obra['Title'])
             mp.put(catalogo['id_obras'], obra['ConstituentID'], lista_obras)
+
+def agregarIDArtista(catalogo, artista):
+    
+    existe = mp.contains(catalogo['id_artistas'], artista['ConstituentID'])
+    
+    if existe:
+        return
+    else:
+        nuevoArtista = crearArtista1(catalogo, artista)
+        mp.put(catalogo['id_artistas'], artista['ConstituentID'], nuevoArtista)
         
 
 def agregarArtista1(catalogo, artista):
@@ -476,16 +488,9 @@ def buscarObrasPorNacionalidad(datos, nacionalidad):
     
 
 def consultarNacionalidad(datos, id):
-
-    info_artistas = datos['artistas']
-    nacionalidad = ""
-    keys_artistas = mp.keySet(info_artistas)
-    for i in lt.iterator(keys_artistas):
-        entri = mp.get(info_artistas, i)
-        artista = me.getValue(entri)
-        if artista['id'] == str(id):
-            nacionalidad = artista['nacionalidad']
-            break
+    entry = mp.get(datos['id_artistas'], str(id))
+    artista = me.getValue(entry)
+    nacionalidad = artista['nacionalidad']
         
     return nacionalidad 
 
