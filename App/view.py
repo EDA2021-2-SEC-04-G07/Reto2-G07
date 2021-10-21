@@ -206,7 +206,7 @@ while True:
             lista_todos_medios.append(medio)
             lt.addLast(info_obras, info_medio)
             
-        obras_artista_ordenada = controller.llamarQuicksort(info_obras, identificador=2)
+        obras_artista_ordenada = controller.llamarMerge(info_obras, identificador=2)
         mayor = 0
         medio_mayor = None
             
@@ -385,8 +385,9 @@ while True:
             i['numMedio'] = mayor
                     
             print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['nombre'], i['fecha_nacimiento'], i['genero'], lt.size(i['obras']), mayor, medio_mayor))
-            
-        lista_prolificos_ordenada = controller.llamarQuicksort(lista_prolificos, identificador=5)
+
+
+        lista_prolificos_ordenada = controller.llamarMerge(lista_prolificos, identificador=5)
         artista_mas_prolifico = lt.getElement(lista_prolificos_ordenada[1], 1)
         obras_prolifico = artista_mas_prolifico['obras']
         lista_mas_prolifico = lt.newList(datastructure='ARRAY_LIST')
@@ -409,7 +410,8 @@ while True:
                 print('{}\t   {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['fecha_obra'], i['fecha_adquisicion'], i['departamento'], i['dimensiones']))
         else:
             sublista_prolificos = lt.subList(lista_mas_prolifico, 1, 5)
-            sublista_prolificos_ordenada = controller.llamarQuicksort(sublista_prolificos, identificador=3)
+            #sublista_prolificos_ordenada = controller.llamarQuicksort(sublista_prolificos, identificador=3)
+            sublista_prolificos_ordenada = controller.llamarMerge(sublista_prolificos, identificador=3)
             
             for i in lt.iterator(sublista_prolificos_ordenada[1]):
                 print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['fecha'], i['fecha_adquisicion'], i['medio'], i['departamento'], i['dimensiones']))
