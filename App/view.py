@@ -336,6 +336,7 @@ while True:
         anho_inicial = int(input("Digite el año inicial: "))
         anho_final = int(input("Digite el año final: "))
         
+        tiempo_inicial = time.process_time()
         rango_artistas = controller.rangoArtistasPorAnho(catalogo, anho_inicial, anho_final)
         lista_final = lt.newList(datastructure='ARRAY_LIST')
         
@@ -355,6 +356,7 @@ while True:
         print('=================================================================================================')     
         
         for i in lt.iterator(lista_prolificos):
+            
             listax = i['obras']
             lista_medio = lt.newList(datastructure='ARRAY_LIST')
             lista_todos_medios = []
@@ -415,6 +417,10 @@ while True:
             
             for i in lt.iterator(sublista_prolificos_ordenada[1]):
                 print('{}\t   {} \t\t {} \t\t {} \t\t {} \t\t {}'.format(i['titulo'], i['fecha'], i['fecha_adquisicion'], i['medio'], i['departamento'], i['dimensiones']))
+                
+        tiempo_final = time.process_time()
+        duracion = (tiempo_final - tiempo_inicial)*1000
+        print('El tiempo de ejecución fue de: ',duracion, ' ms.')
                 
         input()
         system("cls")
